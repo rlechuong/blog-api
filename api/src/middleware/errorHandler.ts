@@ -11,6 +11,9 @@ const errorHandler = (err: unknown, req: Request, res: Response, next: NextFunct
     if (err.code === "P2003") {
       return res.status(400).json({ error: "Referenced record does not exist." });
     }
+    if (err.code === "P2025") {
+      return res.status(404).json({ error: "Record not found." });
+    }
   }
 
   return res.status(500).json({ error: "Something went wrong." });

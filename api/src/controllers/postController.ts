@@ -2,9 +2,27 @@ import { validationResult, matchedData } from "express-validator";
 import type { Request, Response, NextFunction } from "express";
 import {
   createPost,
+  deletePost,
   findManyPublishedPosts,
   findPublishedPostById,
 } from "../queries/postQueries.js";
+
+const handleCreatePost = async (req: Request, res: Response, next: NextFunction) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  // TODO(auth): refactor once JWT auth provides authorId via req.user.id
+  const { title, content, authorId } = matchedData(req);
+
+  try {
+    const post = await createPost(title, content, authorId);
+    return res.status(201).json(post);
+  } catch (err) {
+    return next(err);
+  }
+};
 
 const handleGetPublishedPosts = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -32,21 +50,18 @@ const handleGetPublishedPostById = async (req: Request, res: Response, next: Nex
   }
 };
 
-const handleCreatePost = async (req: Request, res: Response, next: NextFunction) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+const handleDeletePost = async (req: Request, res: Response, next: NextFunction) => {
+  const postId = Number(req.params.id);
+  if (Number.isNaN(postId)) {
+    return res.status(400).json({ error: "Invalid Post ID." });
   }
 
-  // TODO(auth): refactor once JWT auth provides authorId via req.user.id
-  const { title, content, authorId } = matchedData(req);
-
   try {
-    const post = await createPost(title, content, authorId);
-    return res.status(201).json(post);
+    await deletePost(postId);
+    return res.status(204).send();
   } catch (err) {
     return next(err);
   }
 };
 
-export { handleGetPublishedPosts, handleGetPublishedPostById, handleCreatePost };
+export { handleCreatePost, handleGetPublishedPosts, handleGetPublishedPostById, handleDeletePost };
