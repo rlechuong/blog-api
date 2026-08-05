@@ -6,7 +6,7 @@ const createPostValidator = [
     .notEmpty()
     .withMessage("Title is required.")
     .isLength({ max: 200 })
-    .withMessage("Title must be 200 characters or less."),
+    .withMessage("Title must be 200 characters or fewer."),
   body("content")
     .trim()
     .notEmpty()
@@ -17,4 +17,22 @@ const createPostValidator = [
   body("authorId").isInt({ min: 1 }).withMessage("A valid authorId is required."),
 ];
 
-export { createPostValidator };
+const updatePostValidator = [
+  body("title")
+    .optional()
+    .trim()
+    .notEmpty()
+    .withMessage("Title cannot be empty.")
+    .isLength({ max: 200 })
+    .withMessage("Title must be 200 characters or fewer."),
+  body("content")
+    .optional()
+    .trim()
+    .notEmpty()
+    .withMessage("Content cannot be empty.")
+    .isLength({ max: 50000 })
+    .withMessage("Content must be 50,000 characters or fewer."),
+  body("isPublished").optional().isBoolean().withMessage("isPublished must be a boolean."),
+];
+
+export { createPostValidator, updatePostValidator };

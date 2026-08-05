@@ -5,6 +5,7 @@ import {
   deletePost,
   findManyPublishedPosts,
   findPublishedPostById,
+  updatePost,
 } from "../queries/postQueries.js";
 
 const handleCreatePost = async (req: Request, res: Response, next: NextFunction) => {
@@ -50,6 +51,27 @@ const handleGetPublishedPostById = async (req: Request, res: Response, next: Nex
   }
 };
 
+const handleUpdatePost = async (req: Request, res: Response, next: NextFunction) => {
+  const postId = Number(req.params.id);
+  if (Number.isNaN(postId)) {
+    return res.status(400).json({ error: "Invalid Post ID." });
+  }
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { title, content, isPublished } = matchedData(req);
+
+  try {
+    const post = await updatePost(postId, { title, content, isPublished });
+    return res.status(200).json(post);
+  } catch (err) {
+    return next(err);
+  }
+};
+
 const handleDeletePost = async (req: Request, res: Response, next: NextFunction) => {
   const postId = Number(req.params.id);
   if (Number.isNaN(postId)) {
@@ -64,4 +86,10 @@ const handleDeletePost = async (req: Request, res: Response, next: NextFunction)
   }
 };
 
-export { handleCreatePost, handleGetPublishedPosts, handleGetPublishedPostById, handleDeletePost };
+export {
+  handleCreatePost,
+  handleGetPublishedPosts,
+  handleGetPublishedPostById,
+  handleUpdatePost,
+  handleDeletePost,
+};
