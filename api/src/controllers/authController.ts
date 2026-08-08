@@ -1,4 +1,5 @@
 import { validationResult, matchedData } from "express-validator";
+import passport from "passport";
 import type { Request, Response, NextFunction } from "express";
 import { createUser } from "../queries/userQueries.js";
 import { hashPassword } from "../lib/password.js";
@@ -28,4 +29,31 @@ const handleRegister = async (req: Request, res: Response, next: NextFunction) =
   }
 };
 
-export { handleRegister };
+const handleLogin = (req: Request, res: Response, next: NextFunction) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  passport.authenticate(
+    "local",
+    { session: false },
+    (err: Error | null, user: Express.User | false, info: { message: string } | undefined) => {
+      if (err) {
+        return next(err);
+      }
+
+      if (!user) {
+        return res.status(401).json({ error: info?.message ?? "Invalid email or password." });
+      }
+
+      const token = generateToken({ id: user.id, role: user.role });
+      return res.status(200).json({
+        token,
+        user: { id: user.id, email: user.email, name: user.name, role: user.role },
+      });
+    },
+  )(req, res, next);
+};
+
+export { handleRegister, handleLogin };

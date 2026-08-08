@@ -8,4 +8,12 @@ const createUser = async (email: string, name: string, passwordHash: string) => 
   return user;
 };
 
-export { createUser };
+const findUserByEmail = async (email: string) => {
+  const user = await prisma.user.findUnique({
+    where: { email },
+  });
+
+  return user;
+};
+
+export { createUser, findUserByEmail };

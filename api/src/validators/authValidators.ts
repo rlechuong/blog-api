@@ -32,4 +32,9 @@ const registerValidator = [
     }),
 ];
 
-export { registerValidator };
+const loginValidator = [
+  body("email").notEmpty().withMessage("Email is required."),
+  body("password").notEmpty().withMessage("Password is required."),
+];
+
+export { registerValidator, loginValidator };
