@@ -9,13 +9,20 @@ import {
 import { handleCreateComment } from "../controllers/commentController.js";
 import { createPostValidator, updatePostValidator } from "../validators/postValidators.js";
 import { createCommentValidator } from "../validators/commentValidators.js";
+import { requireAuth, requireRole } from "../middleware/auth.js";
 
 const postRouter = Router();
 
 postRouter.get("/", handleGetPublishedPosts);
 postRouter.get("/:id", handleGetPublishedPostById);
 
-postRouter.post("/", createPostValidator, handleCreatePost);
+postRouter.post(
+  "/",
+  requireAuth,
+  requireRole("AUTHOR", "ADMIN"),
+  createPostValidator,
+  handleCreatePost,
+);
 postRouter.post("/:postId/comments", createCommentValidator, handleCreateComment);
 
 postRouter.patch("/:id", updatePostValidator, handleUpdatePost);

@@ -13,8 +13,6 @@ const createPostValidator = [
     .withMessage("Content is required.")
     .isLength({ max: 50000 })
     .withMessage("Content must be 50,000 characters or fewer."),
-  // TODO(auth): remove once JWT auth provides authorId via req.user.id
-  body("authorId").isInt({ min: 1 }).withMessage("A valid authorId is required."),
 ];
 
 const updatePostValidator = [

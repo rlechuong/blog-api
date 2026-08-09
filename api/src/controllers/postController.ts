@@ -9,13 +9,17 @@ import {
 } from "../queries/postQueries.js";
 
 const handleCreatePost = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    return res.status(401).json({ error: "Not authenticated." });
+  }
+  const authorId = req.user.id;
+
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  // TODO(auth): refactor once JWT auth provides authorId via req.user.id
-  const { title, content, authorId } = matchedData(req);
+  const { title, content } = matchedData(req);
 
   try {
     const post = await createPost(title, content, authorId);

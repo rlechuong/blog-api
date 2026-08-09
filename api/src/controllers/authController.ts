@@ -1,10 +1,11 @@
 import { validationResult, matchedData } from "express-validator";
 import passport from "passport";
 import type { Request, Response, NextFunction } from "express";
+import type { User } from "../generated/prisma/client.js";
+import { Prisma } from "../generated/prisma/client.js";
 import { createUser } from "../queries/userQueries.js";
 import { hashPassword } from "../lib/password.js";
 import { generateToken } from "../lib/token.js";
-import { Prisma } from "../generated/prisma/client.js";
 
 const handleRegister = async (req: Request, res: Response, next: NextFunction) => {
   const errors = validationResult(req);
@@ -38,7 +39,7 @@ const handleLogin = (req: Request, res: Response, next: NextFunction) => {
   passport.authenticate(
     "local",
     { session: false },
-    (err: Error | null, user: Express.User | false, info: { message: string } | undefined) => {
+    (err: Error | null, user: User | false, info: { message: string } | undefined) => {
       if (err) {
         return next(err);
       }
