@@ -36,6 +36,15 @@ const findPublishedPostById = async (id: number) => {
   return post;
 };
 
+const getPostAuthorId = async (id: number) => {
+  const post = await prisma.post.findUnique({
+    where: { id },
+    select: { authorId: true },
+  });
+
+  return post;
+};
+
 const updatePost = async (
   id: number,
   data: { title?: string; content?: string; isPublished?: boolean },
@@ -74,4 +83,11 @@ const deletePost = async (id: number) => {
   return post;
 };
 
-export { createPost, findManyPublishedPosts, findPublishedPostById, updatePost, deletePost };
+export {
+  createPost,
+  findManyPublishedPosts,
+  findPublishedPostById,
+  getPostAuthorId,
+  updatePost,
+  deletePost,
+};

@@ -5,6 +5,7 @@ import {
   deletePost,
   findManyPublishedPosts,
   findPublishedPostById,
+  getPostAuthorId,
   updatePost,
 } from "../queries/postQueries.js";
 
@@ -56,6 +57,10 @@ const handleGetPublishedPostById = async (req: Request, res: Response, next: Nex
 };
 
 const handleUpdatePost = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    return res.status(401).json({ error: "Not authenticated." });
+  }
+
   const postId = Number(req.params.id);
   if (Number.isNaN(postId)) {
     return res.status(400).json({ error: "Invalid Post ID." });
@@ -69,6 +74,17 @@ const handleUpdatePost = async (req: Request, res: Response, next: NextFunction)
   const { title, content, isPublished } = matchedData(req);
 
   try {
+    const postRecord = await getPostAuthorId(postId);
+    if (!postRecord) {
+      return res.status(404).json({ error: "Post Not Found." });
+    }
+
+    const isOwner = postRecord.authorId === req.user.id;
+    const isAdmin = req.user.role === "ADMIN";
+    if (!isOwner && !isAdmin) {
+      return res.status(403).json({ error: "You do not have permission to modify this post." });
+    }
+
     const post = await updatePost(postId, { title, content, isPublished });
     return res.status(200).json(post);
   } catch (err) {

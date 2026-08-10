@@ -25,7 +25,13 @@ postRouter.post(
 );
 postRouter.post("/:postId/comments", createCommentValidator, handleCreateComment);
 
-postRouter.patch("/:id", updatePostValidator, handleUpdatePost);
+postRouter.patch(
+  "/:id",
+  requireAuth,
+  requireRole("AUTHOR", "ADMIN"),
+  updatePostValidator,
+  handleUpdatePost,
+);
 
 postRouter.delete("/:id", handleDeletePost);
 
