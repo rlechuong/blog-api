@@ -74,14 +74,14 @@ const handleUpdatePost = async (req: Request, res: Response, next: NextFunction)
   const { title, content, isPublished } = matchedData(req);
 
   try {
-    const postRecord = await getPostAuthorId(postId);
-    if (!postRecord) {
+    const postOwnership = await getPostAuthorId(postId);
+    if (!postOwnership) {
       return res.status(404).json({ error: "Post Not Found." });
     }
 
-    const isOwner = postRecord.authorId === req.user.id;
+    const isPostOwner = postOwnership.authorId === req.user.id;
     const isAdmin = req.user.role === "ADMIN";
-    if (!isOwner && !isAdmin) {
+    if (!isPostOwner && !isAdmin) {
       return res.status(403).json({ error: "You do not have permission to modify this post." });
     }
 
@@ -103,18 +103,18 @@ const handleDeletePost = async (req: Request, res: Response, next: NextFunction)
   }
 
   try {
-    const postRecord = await getPostAuthorId(postId);
-    if (!postRecord) {
+    const postOwnership = await getPostAuthorId(postId);
+    if (!postOwnership) {
       return res.status(404).json({ error: "Post Not Found." });
     }
 
-    const isOwner = postRecord.authorId === req.user.id;
+    const isPostOwner = postOwnership.authorId === req.user.id;
     const isAdmin = req.user.role === "ADMIN";
 
-    if (!isOwner && !isAdmin) {
+    if (!isPostOwner && !isAdmin) {
       return res.status(403).json({ error: "You do not have permission to delete this post." });
     }
-    
+
     await deletePost(postId);
     return res.status(204).send();
   } catch (err) {

@@ -23,7 +23,7 @@ postRouter.post(
   createPostValidator,
   handleCreatePost,
 );
-postRouter.post("/:postId/comments", createCommentValidator, handleCreateComment);
+postRouter.post("/:postId/comments", requireAuth, createCommentValidator, handleCreateComment);
 
 postRouter.patch(
   "/:id",

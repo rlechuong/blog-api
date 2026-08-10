@@ -12,6 +12,27 @@ const createComment = async (content: string, userId: number, postId: number) =>
   return comment;
 };
 
+const getCommentUserId = async (commentId: number) => {
+  const comment = await prisma.comment.findUnique({
+    where: { id: commentId },
+    select: { userId: true },
+  });
+
+  return comment;
+};
+
+const getCommentOwnershipInfo = async (commentId: number) => {
+  const comment = await prisma.comment.findUnique({
+    where: { id: commentId },
+    select: {
+      userId: true,
+      post: { select: { authorId: true } },
+    },
+  });
+
+  return comment;
+};
+
 const updateComment = async (id: number, data: { content: string }) => {
   const comment = await prisma.comment.update({
     where: { id },
@@ -29,4 +50,4 @@ const deleteComment = async (id: number) => {
   return comment;
 };
 
-export { createComment, updateComment, deleteComment };
+export { createComment, getCommentUserId, getCommentOwnershipInfo, updateComment, deleteComment };
