@@ -1,5 +1,8 @@
 import express from "express";
 import passport from "passport";
+import helmet from "helmet";
+import cors from "cors";
+import { generalLimiter } from "./middleware/rateLimit.js";
 import { authRouter } from "./routes/authRouter.js";
 import { postRouter } from "./routes/postRouter.js";
 import { commentRouter } from "./routes/commentRouter.js";
@@ -9,6 +12,16 @@ import "./config/passport.js";
 
 const app = express();
 
+app.use(helmet());
+
+const allowedOrigins = process.env.CORS_ORIGINS?.split(",") ?? [];
+
+const corsOptions = {
+  origin: allowedOrigins,
+};
+
+app.use(cors(corsOptions));
+app.use(generalLimiter);
 app.use(express.json());
 
 app.use(passport.initialize());
