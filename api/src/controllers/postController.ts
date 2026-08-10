@@ -11,7 +11,7 @@ import {
 
 const handleCreatePost = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
-    return res.status(401).json({ error: "Not authenticated." });
+    return res.status(401).json({ error: "Not Authenticated." });
   }
   const authorId = req.user.id;
 
@@ -58,7 +58,7 @@ const handleGetPublishedPostById = async (req: Request, res: Response, next: Nex
 
 const handleUpdatePost = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
-    return res.status(401).json({ error: "Not authenticated." });
+    return res.status(401).json({ error: "Not Authenticated." });
   }
 
   const postId = Number(req.params.id);
@@ -93,12 +93,28 @@ const handleUpdatePost = async (req: Request, res: Response, next: NextFunction)
 };
 
 const handleDeletePost = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    return res.status(401).json({ error: "Not Authenticated." });
+  }
+
   const postId = Number(req.params.id);
   if (Number.isNaN(postId)) {
     return res.status(400).json({ error: "Invalid Post ID." });
   }
 
   try {
+    const postRecord = await getPostAuthorId(postId);
+    if (!postRecord) {
+      return res.status(404).json({ error: "Post Not Found." });
+    }
+
+    const isOwner = postRecord.authorId === req.user.id;
+    const isAdmin = req.user.role === "ADMIN";
+
+    if (!isOwner && !isAdmin) {
+      return res.status(403).json({ error: "You do not have permission to delete this post." });
+    }
+    
     await deletePost(postId);
     return res.status(204).send();
   } catch (err) {

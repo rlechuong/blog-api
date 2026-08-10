@@ -33,6 +33,6 @@ postRouter.patch(
   handleUpdatePost,
 );
 
-postRouter.delete("/:id", handleDeletePost);
+postRouter.delete("/:id", requireAuth, requireRole("AUTHOR", "ADMIN"), handleDeletePost);
 
 export { postRouter };

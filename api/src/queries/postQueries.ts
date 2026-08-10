@@ -36,9 +36,9 @@ const findPublishedPostById = async (id: number) => {
   return post;
 };
 
-const getPostAuthorId = async (id: number) => {
+const getPostAuthorId = async (postId: number) => {
   const post = await prisma.post.findUnique({
-    where: { id },
+    where: { id: postId },
     select: { authorId: true },
   });
 
