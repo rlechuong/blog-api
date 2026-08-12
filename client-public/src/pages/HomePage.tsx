@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { getPosts } from "../api/posts.js";
 import type { Post } from "../types/post.js";
+import { Link } from "react-router";
 
 const HomePage = () => {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -34,9 +35,12 @@ const HomePage = () => {
     <ul>
       {posts.map((post) => (
         <li key={post.id}>
-          <h3>{post.title}</h3>
+          <h3>
+            <Link to={`/posts/${post.id}`}>{post.title}</Link>
+          </h3>
           <p>{post.content}</p>
           <p>Author: {post.author.name}</p>
+          <p>Published: {post.publishedAt}</p>
           <p>Last Updated: {post.updatedAt}</p>
         </li>
       ))}
