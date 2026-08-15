@@ -1,11 +1,12 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import type { PublicUser } from "../types/user.js";
-import { login as loginRequest, register as registerRequest } from "../api/auth.js";
+import { getMe, login as loginRequest, register as registerRequest } from "../api/auth.js";
 
 interface AuthContextValue {
   user: PublicUser | null;
   token: string | null;
+  loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (
     email: string,
@@ -20,7 +21,29 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<PublicUser | null>(null);
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(() => localStorage.getItem("token"));
+  const [loading, setLoading] = useState(() => !!localStorage.getItem("token"));
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (!storedToken) {
+      return;
+    }
+
+    const restoreUser = async () => {
+      try {
+        const data = await getMe();
+        setUser(data.user);
+      } catch {
+        setToken(null);
+        localStorage.removeItem("token");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    restoreUser();
+  }, []);
 
   const login = async (email: string, password: string) => {
     const data = await loginRequest(email, password);
@@ -48,7 +71,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, register, logout }}>
+    <AuthContext.Provider value={{ user, token, loading, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

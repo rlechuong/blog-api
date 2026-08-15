@@ -25,5 +25,9 @@ const register = async (
   });
 };
 
-export { login, register };
+const getMe = async (): Promise<{ user: PublicUser }> => {
+  return apiFetch("/api/auth/me");
+};
+
+export { login, register, getMe };
 export type { AuthResponse };
