@@ -3,7 +3,7 @@ import passport from "passport";
 import type { Request, Response, NextFunction } from "express";
 import type { User } from "../generated/prisma/client.js";
 import { Prisma } from "../generated/prisma/client.js";
-import { createUser } from "../queries/userQueries.js";
+import { createUser, findUserById } from "../queries/userQueries.js";
 import { hashPassword } from "../lib/password.js";
 import { generateToken } from "../lib/token.js";
 
@@ -57,4 +57,21 @@ const handleLogin = (req: Request, res: Response, next: NextFunction) => {
   )(req, res, next);
 };
 
-export { handleRegister, handleLogin };
+const handleGetMe = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    return res.status(401).json({ error: "Not Authenticated." });
+  }
+  const userId = req.user.id;
+
+  try {
+    const user = await findUserById(userId);
+    if (!user) {
+      return res.status(401).json({ error: "User Not Found." });
+    }
+    return res.status(200).json({ user });
+  } catch (err) {
+    return next(err);
+  }
+};
+
+export { handleRegister, handleLogin, handleGetMe };
