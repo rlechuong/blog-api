@@ -7,6 +7,7 @@ const createComment = async (content: string, userId: number, postId: number) =>
       userId,
       postId,
     },
+    include: { user: { select: { id: true, name: true } } },
   });
 
   return comment;
@@ -37,6 +38,7 @@ const updateComment = async (id: number, data: { content: string }) => {
   const comment = await prisma.comment.update({
     where: { id },
     data,
+    include: { user: { select: { id: true, name: true } } },
   });
 
   return comment;

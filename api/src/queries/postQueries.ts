@@ -2,11 +2,8 @@ import { prisma } from "../lib/prisma.js";
 
 const createPost = async (title: string, content: string, authorId: number) => {
   const post = await prisma.post.create({
-    data: {
-      title,
-      content,
-      authorId,
-    },
+    data: { title, content, authorId },
+    include: { author: { select: { id: true, name: true } } },
   });
 
   return post;
@@ -70,6 +67,7 @@ const updatePost = async (
   const post = await prisma.post.update({
     where: { id },
     data: updateData,
+    include: { author: { select: { id: true, name: true } } },
   });
 
   return post;
