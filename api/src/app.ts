@@ -2,6 +2,7 @@ import express from "express";
 import passport from "passport";
 import helmet from "helmet";
 import cors from "cors";
+import { env } from "./config/env.js";
 import { generalLimiter } from "./middleware/rateLimit.js";
 import { authRouter } from "./routes/authRouter.js";
 import { postRouter } from "./routes/postRouter.js";
@@ -16,7 +17,7 @@ app.set("trust proxy", 1);
 
 app.use(helmet());
 
-const allowedOrigins = process.env.CORS_ORIGINS?.split(",") ?? [];
+const allowedOrigins = env.CORS_ORIGINS;
 
 const corsOptions = {
   origin: allowedOrigins,
