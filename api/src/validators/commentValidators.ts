@@ -5,6 +5,7 @@ const createCommentValidator = [
     .trim()
     .notEmpty()
     .withMessage("Content is required.")
+    .bail()
     .isLength({ max: 50000 })
     .withMessage("Content must be 50,000 characters or fewer."),
 ];
@@ -14,6 +15,7 @@ const updateCommentValidator = [
     .trim()
     .notEmpty()
     .withMessage("Content is required.")
+    .bail()
     .isLength({ max: 50000 })
     .withMessage("Content must be 50,000 characters or fewer."),
 ];

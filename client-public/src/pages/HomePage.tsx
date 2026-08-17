@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
-import { getPosts } from "../api/posts.js";
-import type { Post } from "../types/post.js";
 import { Link } from "react-router";
+import { getPosts } from "../api/posts.js";
+import { formatDate } from "../lib/formatDate.js";
+import { ApiError } from "../api/client.js";
+import type { Post } from "../types/post.js";
 
 const HomePage = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -14,7 +16,7 @@ const HomePage = () => {
         const data = await getPosts();
         setPosts(data);
       } catch (err) {
-        if (err instanceof Error) {
+        if (err instanceof ApiError) {
           setError(err.message);
         } else {
           setError("Something went wrong.");
@@ -40,8 +42,8 @@ const HomePage = () => {
           </h3>
           <p>{post.content}</p>
           <p>Author: {post.author.name}</p>
-          <p>Published: {post.publishedAt}</p>
-          <p>Last Updated: {post.updatedAt}</p>
+          {post.publishedAt && <p>Published: {formatDate(post.publishedAt)}</p>}
+          {post.updatedAt !== post.createdAt && <p>Last Updated: {formatDate(post.updatedAt)}</p>}
         </li>
       ))}
     </ul>

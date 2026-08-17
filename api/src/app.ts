@@ -12,6 +12,8 @@ import "./config/passport.js";
 
 const app = express();
 
+app.set("trust proxy", 1);
+
 app.use(helmet());
 
 const allowedOrigins = process.env.CORS_ORIGINS?.split(",") ?? [];
@@ -31,7 +33,7 @@ app.use("/api/posts", postRouter);
 app.use("/api/comments", commentRouter);
 
 app.get("/", (req, res) => {
-  res.send("Placeholder.");
+  res.json({ status: "ok" });
 });
 
 app.use(errorHandler);

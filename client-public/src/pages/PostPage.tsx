@@ -3,6 +3,8 @@ import { useParams, Link } from "react-router";
 import { useAuth } from "../context/useAuth.js";
 import { getPostById } from "../api/posts.js";
 import CommentForm from "../components/CommentForm.js";
+import { formatDate, formatDateTime } from "../lib/formatDate.js";
+import { ApiError } from "../api/client.js";
 import type { PostWithComments } from "../types/post.js";
 import type { Comment } from "../types/comment.js";
 
@@ -32,7 +34,7 @@ const PostPage = () => {
         const data = await getPostById(postId);
         setPost(data);
       } catch (err) {
-        if (err instanceof Error) {
+        if (err instanceof ApiError) {
           setError(err.message);
         } else {
           setError("Something went wrong.");
@@ -55,8 +57,8 @@ const PostPage = () => {
       <div>
         <h2>{post.title}</h2>
         <p>{post.content}</p>
-        <p>Published: {post.publishedAt}</p>
-        <p>Last Updated: {post.updatedAt}</p>
+        {post.publishedAt && <p>Published: {formatDate(post.publishedAt)}</p>}
+        {post.updatedAt !== post.createdAt && <p>Last Updated: {formatDate(post.updatedAt)}</p>}
       </div>
 
       {user ? (
@@ -76,8 +78,10 @@ const PostPage = () => {
             <li key={comment.id}>
               <p>{comment.content}</p>
               <p>User:{comment.user.name}</p>
-              <p>{comment.createdAt}</p>
-              {comment.createdAt !== comment.updatedAt && <p>Edited: {comment.updatedAt}</p>}
+              <p>Posted: {formatDateTime(comment.createdAt)}</p>
+              {comment.createdAt !== comment.updatedAt && (
+                <p>Edited: {formatDateTime(comment.updatedAt)}</p>
+              )}
             </li>
           ))}
         </ul>

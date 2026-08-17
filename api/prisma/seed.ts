@@ -3,12 +3,16 @@ import { prisma } from "../src/lib/prisma.js";
 
 const main = async () => {
   try {
+    await prisma.post.deleteMany();
+
     const adminPasswordHash = await bcrypt.hash("adminPassword123", 10);
     const authorPasswordHash = await bcrypt.hash("authorPassword123", 10);
     const userPasswordHash = await bcrypt.hash("userPassword123", 10);
 
-    const admin = await prisma.user.create({
-      data: {
+    const admin = await prisma.user.upsert({
+      where: { email: "admin@example.com" },
+      update: {},
+      create: {
         email: "admin@example.com",
         name: "The Admin",
         passwordHash: adminPasswordHash,
@@ -17,8 +21,10 @@ const main = async () => {
     });
     console.log("Seeded: ", admin);
 
-    const author = await prisma.user.create({
-      data: {
+    const author = await prisma.user.upsert({
+      where: { email: "author@example.com" },
+      update: {},
+      create: {
         email: "author@example.com",
         name: "The Author",
         passwordHash: authorPasswordHash,
@@ -27,8 +33,10 @@ const main = async () => {
     });
     console.log("Seeded: ", author);
 
-    const user = await prisma.user.create({
-      data: {
+    const user = await prisma.user.upsert({
+      where: { email: "user@example.com" },
+      update: {},
+      create: {
         email: "user@example.com",
         name: "The User",
         passwordHash: userPasswordHash,
