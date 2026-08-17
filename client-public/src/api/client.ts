@@ -1,5 +1,11 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
+let onUnauthorized: (() => void) | null = null;
+
+const setUnauthorizedHandler = (handler: () => void) => {
+  onUnauthorized = handler;
+};
+
 class ApiError extends Error {
   status: number;
   errors?: { msg: string; path?: string }[];
@@ -35,6 +41,10 @@ const apiFetch = async (path: string, options: RequestInit = {}) => {
   }
 
   if (!response.ok) {
+    if (response.status === 401 && token) {
+      onUnauthorized?.();
+    }
+
     if (Array.isArray(data.errors)) {
       throw new ApiError(data.errors[0]?.msg ?? "Validation failed.", response.status, data.errors);
     }
@@ -44,4 +54,4 @@ const apiFetch = async (path: string, options: RequestInit = {}) => {
   return data;
 };
 
-export { ApiError, apiFetch };
+export { ApiError, apiFetch, setUnauthorizedHandler };

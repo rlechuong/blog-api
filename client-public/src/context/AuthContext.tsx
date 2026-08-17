@@ -1,7 +1,8 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import type { PublicUser } from "../types/user.js";
 import { getMe, login as loginRequest, register as registerRequest } from "../api/auth.js";
+import { setUnauthorizedHandler } from "../api/client.js";
 
 interface AuthContextValue {
   user: PublicUser | null;
@@ -64,11 +65,15 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("token", data.token);
   };
 
-  const logout = () => {
+  const logout = useCallback(() => {
     setUser(null);
     setToken(null);
     localStorage.removeItem("token");
-  };
+  }, []);
+
+  useEffect(() => {
+    setUnauthorizedHandler(logout);
+  }, [logout]);
 
   return (
     <AuthContext.Provider value={{ user, token, loading, login, register, logout }}>
