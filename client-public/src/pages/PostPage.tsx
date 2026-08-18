@@ -7,6 +7,7 @@ import { formatDate, formatDateTime } from "../lib/formatDate.js";
 import { ApiError } from "../api/client.js";
 import type { PostWithComments } from "../types/post.js";
 import type { Comment } from "../types/comment.js";
+import styles from "./PostPage.module.css";
 
 const PostPage = () => {
   const { user } = useAuth();
@@ -54,38 +55,55 @@ const PostPage = () => {
 
   return (
     <div>
-      <div>
-        <h2>{post.title}</h2>
-        <p>{post.content}</p>
-        {post.publishedAt && <p>Published: {formatDate(post.publishedAt)}</p>}
-        {post.updatedAt !== post.createdAt && <p>Last Updated: {formatDate(post.updatedAt)}</p>}
-      </div>
-
-      {user ? (
-        <div>
-          <CommentForm postId={post.id} onCommentCreated={handleCommentCreated} />
-        </div>
-      ) : (
-        <p>
-          <Link to="/login">Log In</Link> to leave a comment.
+      <article className={styles.article}>
+        <h1>{post.title}</h1>
+        <p className={styles.meta}>
+          By {post.author.name}
+          {post.publishedAt && (
+            <>
+              {" · "}
+              <time dateTime={post.publishedAt}>{formatDate(post.publishedAt)}</time>
+            </>
+          )}
+          {post.updatedAt !== post.createdAt && (
+            <>
+              {" · "}
+              Updated: <time dateTime={post.updatedAt}>{formatDate(post.updatedAt)}</time>
+            </>
+          )}
         </p>
-      )}
+        <p>{post.content}</p>
+      </article>
 
-      <div>
+      <section className={styles.section}>
+        <h2>Leave A Comment</h2>
+        {user ? (
+          <CommentForm postId={post.id} onCommentCreated={handleCommentCreated} />
+        ) : (
+          <p>
+            <Link to="/login">Log In</Link> to leave a comment.
+          </p>
+        )}
+      </section>
+
+      <section className={styles.section}>
         <h2>Comments</h2>
-        <ul>
+        <ul className={styles.commentList}>
           {post.comments.map((comment) => (
-            <li key={comment.id}>
-              <p>{comment.content}</p>
-              <p>User:{comment.user.name}</p>
-              <p>Posted: {formatDateTime(comment.createdAt)}</p>
-              {comment.createdAt !== comment.updatedAt && (
-                <p>Edited: {formatDateTime(comment.updatedAt)}</p>
-              )}
+            <li key={comment.id} className={styles.commentItem}>
+              <article>
+                <p className={styles.commentMeta}>
+                  {comment.user.name}
+                  {" · "}
+                  <time dateTime={comment.createdAt}>{formatDateTime(comment.createdAt)}</time>
+                  {comment.createdAt !== comment.updatedAt && " (Edited)"}
+                </p>
+                <p>{comment.content}</p>
+              </article>
             </li>
           ))}
         </ul>
-      </div>
+      </section>
     </div>
   );
 };

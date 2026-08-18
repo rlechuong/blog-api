@@ -1,0 +1,28 @@
+.pageTitle {
+  margin-bottom: var(--space-md);
+  text-align: center;
+}
+
+.postList {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.postItem {
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.postItem:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.meta {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--space-sm);
+}

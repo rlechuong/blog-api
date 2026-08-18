@@ -2,6 +2,8 @@ import { useState } from "react";
 import { createComment } from "../api/comments.js";
 import { ApiError } from "../api/client.js";
 import type { Comment } from "../types/comment.js";
+import formStyles from "./Form.module.css";
+import styles from "./CommentForm.module.css";
 
 interface CommentFormProps {
   postId: number;
@@ -34,17 +36,18 @@ const CommentForm = ({ postId, onCommentCreated }: CommentFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className={`${formStyles.form} ${styles.form}`}>
       <div>
-        <label htmlFor="content">Content</label>
+        <label htmlFor="content">Comment</label>
         <textarea
           id="content"
+          className={styles.textarea}
           value={content}
           onChange={(e) => setContent(e.target.value)}
           required
         />
       </div>
-      {error && <p>{error}</p>}
+      {error && <p className={formStyles.error}>{error}</p>}
       <button type="submit" disabled={submitting}>
         {submitting ? "Creating Comment..." : "Create Comment"}
       </button>
