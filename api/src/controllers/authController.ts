@@ -19,9 +19,7 @@ const handleRegister = async (req: Request, res: Response, next: NextFunction) =
     const passwordHash = await hashPassword(password);
     const user = await createUser(email, name, passwordHash);
     const token = generateToken({ id: user.id, role: user.role });
-    return res
-      .status(201)
-      .json({ token, user: { id: user.id, email: user.email, name: user.name, role: user.role } });
+    return res.status(201).json({ token, user });
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002") {
       return res.status(409).json({ error: "Email already exists." });
@@ -66,9 +64,9 @@ const handleGetMe = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = await findUserById(userId);
     if (!user) {
-      return res.status(401).json({ error: "User Not Found." });
+      return res.status(401).json({ error: "Session is no longer valid." });
     }
-    return res.status(200).json({ user });
+    return res.status(200).json(user);
   } catch (err) {
     return next(err);
   }

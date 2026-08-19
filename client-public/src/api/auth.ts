@@ -25,7 +25,7 @@ const register = async (
   });
 };
 
-const getMe = async (): Promise<{ user: PublicUser }> => {
+const getMe = async (): Promise<PublicUser> => {
   return apiFetch("/api/auth/me");
 };
 

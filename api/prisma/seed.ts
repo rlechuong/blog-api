@@ -1,13 +1,13 @@
-import bcrypt from "bcrypt";
 import { prisma } from "../src/lib/prisma.js";
+import { hashPassword } from "../src/lib/password.js";
 
 const main = async () => {
   try {
     await prisma.post.deleteMany();
 
-    const adminPasswordHash = await bcrypt.hash("adminPassword123", 10);
-    const authorPasswordHash = await bcrypt.hash("authorPassword123", 10);
-    const userPasswordHash = await bcrypt.hash("userPassword123", 10);
+    const adminPasswordHash = await hashPassword("adminPassword123");
+    const authorPasswordHash = await hashPassword("authorPassword123");
+    const userPasswordHash = await hashPassword("userPassword123");
 
     const admin = await prisma.user.upsert({
       where: { email: "admin@example.com" },

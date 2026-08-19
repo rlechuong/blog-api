@@ -12,6 +12,7 @@ const env = {
   DATABASE_URL: requireEnv("DATABASE_URL"),
   JWT_SECRET: requireEnv("JWT_SECRET"),
   CORS_ORIGINS: process.env.CORS_ORIGINS?.split(",") ?? [],
+  PORT: process.env.PORT ?? "3000",
 };
 
 export { env };

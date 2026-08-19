@@ -33,8 +33,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const restoreUser = async () => {
       try {
-        const data = await getMe();
-        setUser(data.user);
+        const currentUser = await getMe();
+        setUser(currentUser);
       } catch {
         setToken(null);
         localStorage.removeItem("token");

@@ -3,6 +3,7 @@ import { prisma } from "../lib/prisma.js";
 const createUser = async (email: string, name: string, passwordHash: string) => {
   const user = await prisma.user.create({
     data: { email, name, passwordHash },
+    select: { id: true, email: true, name: true, role: true },
   });
 
   return user;
