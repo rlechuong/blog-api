@@ -58,7 +58,7 @@ const PostPage = () => {
       <article className={styles.article}>
         <h1>{post.title}</h1>
         <p className={styles.meta}>
-          By {post.author.name}
+          By {post.author?.name ?? "Deleted User"}
           {post.publishedAt && (
             <>
               {" · "}
@@ -93,7 +93,7 @@ const PostPage = () => {
             <li key={comment.id} className={styles.commentItem}>
               <article>
                 <p className={styles.commentMeta}>
-                  {comment.user.name}
+                  {comment.user?.name ?? "Deleted User"}
                   {" · "}
                   <time dateTime={comment.createdAt}>{formatDateTime(comment.createdAt)}</time>
                   {comment.createdAt !== comment.updatedAt && " (Edited)"}

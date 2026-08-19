@@ -5,9 +5,9 @@ interface Comment {
   content: string;
   createdAt: string;
   updatedAt: string;
-  userId: number;
+  userId: number | null;
   postId: number;
-  user: PublicUser;
+  user: PublicUser | null;
 }
 
 export type { Comment };

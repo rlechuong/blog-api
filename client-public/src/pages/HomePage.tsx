@@ -46,7 +46,7 @@ const HomePage = () => {
                 <Link to={`/posts/${post.id}`}>{post.title}</Link>
               </h2>
               <p className={styles.meta}>
-                By {post.author.name}
+                By {post.author?.name ?? "Deleted User"}
                 {post.publishedAt && (
                   <>
                     {" · "}

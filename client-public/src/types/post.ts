@@ -9,8 +9,8 @@ interface Post {
   createdAt: string;
   publishedAt: string | null;
   updatedAt: string;
-  authorId: number;
-  author: PublicUser;
+  authorId: number | null;
+  author: PublicUser | null;
 }
 
 interface PostWithComments extends Post {

@@ -30,4 +30,3 @@ const getMe = async (): Promise<{ user: PublicUser }> => {
 };
 
 export { login, register, getMe };
-export type { AuthResponse };
