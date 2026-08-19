@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { env } from "../config/env.js";
 import type { Request, Response, NextFunction } from "express";
+import type { Role } from "../generated/prisma/client.js";
 
 const requireAuth = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
@@ -26,7 +27,7 @@ const requireAuth = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const requireRole = (...allowedRoles: string[]) => {
+const requireRole = (...allowedRoles: Role[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.user || !allowedRoles.includes(req.user.role)) {
       return res.status(403).json({ error: "You do not have permission to perform this action." });

@@ -33,7 +33,7 @@ app.use("/api/auth/", authRouter);
 app.use("/api/posts", postRouter);
 app.use("/api/comments", commentRouter);
 
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   res.json({ status: "ok" });
 });
 

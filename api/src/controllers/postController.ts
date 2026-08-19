@@ -30,7 +30,7 @@ const handleCreatePost = async (req: Request, res: Response, next: NextFunction)
   }
 };
 
-const handleGetPublishedPosts = async (req: Request, res: Response, next: NextFunction) => {
+const handleGetPublishedPosts = async (_req: Request, res: Response, next: NextFunction) => {
   try {
     const posts = await findManyPublishedPosts();
     return res.status(200).json(posts);
