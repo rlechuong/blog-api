@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createComment } from "../api/comments.js";
 import { ApiError } from "../api/client.js";
 import type { Comment } from "../types/comment.js";
-import formStyles from "./Form.module.css";
+import formStyles from "../styles/form.module.css";
 import styles from "./CommentForm.module.css";
 
 interface CommentFormProps {

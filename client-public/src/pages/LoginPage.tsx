@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router";
 import { useAuth } from "../context/useAuth.js";
 import { ApiError } from "../api/client.js";
-import styles from "../components/Form.module.css";
+import formStyles from "../styles/form.module.css";
+import styles from "./LoginPage.module.css";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -34,8 +35,8 @@ const LoginPage = () => {
 
   return (
     <div>
-      <h1 className={styles.formTitle}>Log In</h1>
-      <form onSubmit={handleSubmit} className={styles.form}>
+      <h1 className={styles.pageTitle}>Log In</h1>
+      <form onSubmit={handleSubmit} className={formStyles.form}>
         <div>
           <label htmlFor="email">Email</label>
           <input
@@ -56,7 +57,7 @@ const LoginPage = () => {
             required
           />
         </div>
-        {error && <p className={styles.error}>{error}</p>}
+        {error && <p className={formStyles.error}>{error}</p>}
         <button type="submit" disabled={submitting}>
           {submitting ? "Logging In..." : "Log In"}
         </button>

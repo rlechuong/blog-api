@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router";
 import { useAuth } from "../context/useAuth.js";
 import { ApiError } from "../api/client.js";
-import styles from "../components/Form.module.css";
+import formStyles from "../styles/form.module.css";
+import styles from "./RegisterPage.module.css";
 
 const RegisterPage = () => {
   const [email, setEmail] = useState("");
@@ -36,8 +37,8 @@ const RegisterPage = () => {
 
   return (
     <div>
-      <h1 className={styles.formTitle}>Register</h1>
-      <form onSubmit={handleRegister} className={styles.form}>
+      <h1 className={styles.pageTitle}>Register</h1>
+      <form onSubmit={handleRegister} className={formStyles.form}>
         <div>
           <label htmlFor="email">Email</label>
           <input
@@ -78,7 +79,7 @@ const RegisterPage = () => {
             required
           />
         </div>
-        {error && <p className={styles.error}>{error}</p>}
+        {error && <p className={formStyles.error}>{error}</p>}
         <button type="submit" disabled={submitting}>
           {submitting ? "Registering..." : "Register"}
         </button>

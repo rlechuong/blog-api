@@ -13,18 +13,18 @@ const createComment = async (content: string, userId: number, postId: number) =>
   return comment;
 };
 
-const getCommentUserId = async (commentId: number) => {
+const getCommentUserId = async (id: number) => {
   const comment = await prisma.comment.findUnique({
-    where: { id: commentId },
+    where: { id },
     select: { userId: true },
   });
 
   return comment;
 };
 
-const getCommentOwnershipInfo = async (commentId: number) => {
+const getCommentOwnershipInfo = async (id: number) => {
   const comment = await prisma.comment.findUnique({
-    where: { id: commentId },
+    where: { id },
     select: {
       userId: true,
       post: { select: { authorId: true } },
