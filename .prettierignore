@@ -1,0 +1,6 @@
+dist
+node_modules
+api/src/generated
+api/.agents
+api/.claude
+api/.windsurf
