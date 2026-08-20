@@ -3,7 +3,8 @@ import { useParams, Link } from "react-router";
 import { useAuth } from "../context/useAuth.js";
 import { getPostById } from "../api/posts.js";
 import CommentForm from "../components/CommentForm.js";
-import { formatDate, formatDateTime } from "../lib/formatDate.js";
+import CommentList from "../components/CommentList.js";
+import { formatDate } from "../lib/formatDate.js";
 import { ApiError } from "../api/client.js";
 import type { PostWithComments } from "../types/post.js";
 import type { Comment } from "../types/comment.js";
@@ -88,21 +89,7 @@ const PostPage = () => {
 
       <section className={styles.section}>
         <h2>Comments</h2>
-        <ul className={styles.commentList}>
-          {post.comments.map((comment) => (
-            <li key={comment.id} className={styles.commentItem}>
-              <article>
-                <p className={styles.commentMeta}>
-                  {comment.user?.name ?? "Deleted User"}
-                  {" · "}
-                  <time dateTime={comment.createdAt}>{formatDateTime(comment.createdAt)}</time>
-                  {comment.createdAt !== comment.updatedAt && " (Edited)"}
-                </p>
-                <p>{comment.content}</p>
-              </article>
-            </li>
-          ))}
-        </ul>
+        <CommentList comments={post.comments} />
       </section>
     </div>
   );
