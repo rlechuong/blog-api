@@ -1,6 +1,7 @@
 import CommentItem from "./CommentItem.js";
 import type { Comment } from "../types/comment.js";
 import styles from "./CommentList.module.css";
+import EmptyMessage from "./EmptyMessage.js";
 
 interface CommentListProps {
   comments: Comment[];
@@ -8,7 +9,7 @@ interface CommentListProps {
 
 const CommentList = ({ comments }: CommentListProps) => {
   if (comments.length === 0) {
-    return <p className={styles.empty}>No comments yet.</p>;
+    return <EmptyMessage message="No comments yet." />;
   }
 
   return (

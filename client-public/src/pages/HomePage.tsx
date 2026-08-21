@@ -4,6 +4,9 @@ import { getPosts } from "../api/posts.js";
 import { ApiError } from "../api/client.js";
 import { formatDate } from "../lib/formatDate.js";
 import { truncate } from "../lib/truncate.js";
+import LoadingMessage from "../components/LoadingMessage.js";
+import ErrorMessage from "../components/ErrorMessage.js";
+import EmptyMessage from "../components/EmptyMessage.js";
 import type { Post } from "../types/post.js";
 import styles from "./HomePage.module.css";
 
@@ -31,9 +34,9 @@ const HomePage = () => {
     fetchPosts();
   }, []);
 
-  if (loading) return <p>Loading Posts...</p>;
-  if (error) return <p>Error: {error}</p>;
-  if (!posts.length) return <p>No posts available.</p>;
+  if (loading) return <LoadingMessage message="Loading Posts..." />;
+  if (error) return <ErrorMessage message={error} />;
+  if (!posts.length) return <EmptyMessage message="No posts available." />;
 
   return (
     <div>

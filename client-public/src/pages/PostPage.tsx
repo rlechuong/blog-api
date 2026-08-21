@@ -6,6 +6,8 @@ import CommentForm from "../components/CommentForm.js";
 import CommentList from "../components/CommentList.js";
 import { formatDate } from "../lib/formatDate.js";
 import { ApiError } from "../api/client.js";
+import LoadingMessage from "../components/LoadingMessage.js";
+import ErrorMessage from "../components/ErrorMessage.js";
 import type { PostWithComments } from "../types/post.js";
 import type { Comment } from "../types/comment.js";
 import styles from "./PostPage.module.css";
@@ -49,10 +51,10 @@ const PostPage = () => {
     fetchPost();
   }, [postId, isValidId]);
 
-  if (!isValidId) return <p>Invalid Post ID.</p>;
-  if (loading) return <p>Loading Post...</p>;
-  if (error) return <p>Error: {error}</p>;
-  if (!post) return <p>No post available.</p>;
+  if (!isValidId) return <ErrorMessage message="Invalid Post ID." />;
+  if (loading) return <LoadingMessage message="Loading Post..." />;
+  if (error) return <ErrorMessage message={error} />;
+  if (!post) return <ErrorMessage message="Post not found." />;
 
   return (
     <div>

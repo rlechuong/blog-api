@@ -1,9 +1,9 @@
 import type { Request, Response, NextFunction } from "express";
 import { Prisma } from "../generated/prisma/client.js";
 
+// Express identifies error-handling middleware by its four-parameter signature.
+// `_next` must remain even though it is unused.
 const errorHandler = (err: unknown, _req: Request, res: Response, _next: NextFunction) => {
-  console.error(err);
-
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
     if (err.code === "P2002") {
       return res.status(409).json({ error: "A record with this value already exists." });
@@ -16,6 +16,7 @@ const errorHandler = (err: unknown, _req: Request, res: Response, _next: NextFun
     }
   }
 
+  console.error(err);
   return res.status(500).json({ error: "Something went wrong." });
 };
 
