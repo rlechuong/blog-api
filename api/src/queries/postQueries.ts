@@ -1,4 +1,5 @@
 import { prisma } from "../lib/prisma.js";
+import type { Role } from "../generated/prisma/client.js";
 
 const createPost = async (title: string, content: string, authorId: number) => {
   const post = await prisma.post.create({
@@ -19,6 +20,16 @@ const findManyPublishedPosts = async () => {
   return posts;
 };
 
+const findManyPostsForAdmin = async (userId: number, role: Role) => {
+  const posts = await prisma.post.findMany({
+    where: role === "ADMIN" ? {} : { authorId: userId },
+    include: { author: { select: { id: true, name: true, role: true } } },
+    orderBy: { createdAt: "desc" },
+  });
+
+  return posts;
+};
+
 const findPublishedPostById = async (id: number) => {
   const post = await prisma.post.findUnique({
     where: { id, isPublished: true },
@@ -26,6 +37,22 @@ const findPublishedPostById = async (id: number) => {
       author: { select: { id: true, name: true, role: true } },
       comments: {
         include: { user: { select: { id: true, name: true, role: true } } },
+        orderBy: { createdAt: "asc" },
+      },
+    },
+  });
+
+  return post;
+};
+
+const findPostByIdForAdmin = async (id: number) => {
+  const post = await prisma.post.findUnique({
+    where: { id },
+    include: {
+      author: { select: { id: true, name: true, role: true } },
+      comments: {
+        include: { user: { select: { id: true, name: true, role: true } } },
+        orderBy: { createdAt: "asc" },
       },
     },
   });
@@ -84,7 +111,9 @@ const deletePost = async (id: number) => {
 export {
   createPost,
   findManyPublishedPosts,
+  findManyPostsForAdmin,
   findPublishedPostById,
+  findPostByIdForAdmin,
   getPostAuthorId,
   updatePost,
   deletePost,

@@ -3,7 +3,9 @@ import type { Request, Response, NextFunction } from "express";
 import {
   createPost,
   deletePost,
+  findManyPostsForAdmin,
   findManyPublishedPosts,
+  findPostByIdForAdmin,
   findPublishedPostById,
   getPostAuthorId,
   updatePost,
@@ -39,6 +41,19 @@ const handleGetPublishedPosts = async (_req: Request, res: Response, next: NextF
   }
 };
 
+const handleGetPostsForAdmin = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    return res.status(401).json({ error: "Not Authenticated." });
+  }
+
+  try {
+    const posts = await findManyPostsForAdmin(req.user.id, req.user.role);
+    return res.status(200).json(posts);
+  } catch (err) {
+    return next(err);
+  }
+};
+
 const handleGetPublishedPostById = async (req: Request, res: Response, next: NextFunction) => {
   const postId = Number(req.params.id);
   if (Number.isNaN(postId)) {
@@ -50,6 +65,35 @@ const handleGetPublishedPostById = async (req: Request, res: Response, next: Nex
     if (!post) {
       return res.status(404).json({ error: "Post Not Found." });
     }
+    return res.status(200).json(post);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+const handleGetPostByIdForAdmin = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    return res.status(401).json({ error: "Not Authenticated." });
+  }
+
+  const postId = Number(req.params.id);
+  if (Number.isNaN(postId)) {
+    return res.status(400).json({ error: "Invalid Post ID." });
+  }
+
+  try {
+    const post = await findPostByIdForAdmin(postId);
+    if (!post) {
+      return res.status(404).json({ error: "Post Not Found." });
+    }
+
+    const isPostOwner = post.authorId === req.user.id;
+    const isAdmin = req.user.role === "ADMIN";
+
+    if (!isPostOwner && !isAdmin) {
+      return res.status(403).json({ error: "You do not have permission to view this post." });
+    }
+
     return res.status(200).json(post);
   } catch (err) {
     return next(err);
@@ -125,7 +169,9 @@ const handleDeletePost = async (req: Request, res: Response, next: NextFunction)
 export {
   handleCreatePost,
   handleGetPublishedPosts,
+  handleGetPostsForAdmin,
   handleGetPublishedPostById,
+  handleGetPostByIdForAdmin,
   handleUpdatePost,
   handleDeletePost,
 };
