@@ -6,6 +6,7 @@ import { env } from "./config/env.js";
 import { generalLimiter } from "./middleware/rateLimit.js";
 import { authRouter } from "./routes/authRouter.js";
 import { postRouter } from "./routes/postRouter.js";
+import { userRouter } from "./routes/userRouter.js";
 import { commentRouter } from "./routes/commentRouter.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
@@ -32,6 +33,7 @@ app.use(passport.initialize());
 app.use("/api/auth/", authRouter);
 app.use("/api/posts", postRouter);
 app.use("/api/comments", commentRouter);
+app.use("/api/users", userRouter);
 
 app.get("/", (_req, res) => {
   res.json({ status: "ok" });
