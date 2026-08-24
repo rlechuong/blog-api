@@ -1,0 +1,8 @@
+.container {
+  text-align: center;
+}
+
+.message {
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-md);
+}
