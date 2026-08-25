@@ -1,0 +1,22 @@
+.form {
+  max-width: none;
+}
+
+.textarea {
+  min-height: 20rem;
+  resize: vertical;
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+}
+
+.actions a {
+  text-decoration: none;
+}
+
+.actions a:hover {
+  text-decoration: underline;
+}
