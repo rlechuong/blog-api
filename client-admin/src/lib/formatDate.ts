@@ -6,6 +6,14 @@ const formatDate = (isoString: string) => {
   });
 };
 
+const formatDateShort = (isoString: string) => {
+  return new Date(isoString).toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+};
+
 const formatDateTime = (isoString: string) => {
   return new Date(isoString).toLocaleString(undefined, {
     year: "numeric",
@@ -16,4 +24,4 @@ const formatDateTime = (isoString: string) => {
   });
 };
 
-export { formatDate, formatDateTime };
+export { formatDate, formatDateShort, formatDateTime };

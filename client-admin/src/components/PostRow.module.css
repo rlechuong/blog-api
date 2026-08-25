@@ -1,0 +1,53 @@
+.titleCell,
+.authorCell {
+  max-width: 20rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: center;
+}
+
+.actions a {
+  font-size: var(--font-size-sm);
+  text-decoration: none;
+}
+
+.actions a:hover {
+  text-decoration: underline;
+}
+
+.actionButton {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-accent);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  font-weight: inherit;
+}
+
+.deleteButton {
+  color: var(--color-error);
+}
+
+.actionButton:hover:not(:disabled) {
+  background: none;
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}
+
+.deleteButton:hover:not(:disabled) {
+  color: var(--color-error);
+  text-decoration: underline;
+}
+
+.actionButton:disabled {
+  background: none;
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+}
