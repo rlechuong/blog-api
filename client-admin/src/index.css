@@ -102,6 +102,10 @@ h6 {
   --radius: 6px;
 }
 
+html {
+  scrollbar-gutter: stable both-edges;
+}
+
 body {
   background-color: var(--color-bg);
   color: var(--color-text);

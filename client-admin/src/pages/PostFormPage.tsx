@@ -5,7 +5,9 @@ import { ApiError } from "../api/client.js";
 import LoadingMessage from "../components/LoadingMessage.js";
 import ErrorMessage from "../components/ErrorMessage.js";
 import formStyles from "../styles/form.module.css";
+import type { Comment } from "../types/comment.js";
 import styles from "./PostFormPage.module.css";
+import CommentList from "../components/CommentList.js";
 
 const PostFormPage = () => {
   const { id } = useParams();
@@ -13,6 +15,7 @@ const PostFormPage = () => {
   const postId = Number(id);
   const isValidId = !Number.isNaN(postId);
 
+  const [comments, setComments] = useState<Comment[]>([]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -31,6 +34,7 @@ const PostFormPage = () => {
         const post = await getAdminPostById(postId);
         setTitle(post.title);
         setContent(post.content);
+        setComments(post.comments);
       } catch (err) {
         if (err instanceof ApiError) {
           setLoadError(err.message);
@@ -66,6 +70,10 @@ const PostFormPage = () => {
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handleCommentDeleted = (id: number) => {
+    setComments((prevComments) => prevComments.filter((comment) => id !== comment.id));
   };
 
   const buttonLabel = submitting
@@ -112,6 +120,12 @@ const PostFormPage = () => {
           <Link to="/">Cancel</Link>
         </div>
       </form>
+      {isEditing && (
+        <section className={styles.comments}>
+          <h2>Comments</h2>
+          <CommentList comments={comments} onCommentDeleted={handleCommentDeleted} />
+        </section>
+      )}
     </div>
   );
 };

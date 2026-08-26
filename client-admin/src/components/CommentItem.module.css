@@ -1,0 +1,37 @@
+.item {
+  padding: var(--space-sm);
+  background-color: var(--color-surface);
+  border-radius: var(--radius);
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--space-xs);
+}
+
+.deleteButton {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-error);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  font-weight: inherit;
+}
+
+.deleteButton:hover:not(:disabled) {
+  background: none;
+  color: var(--color-error);
+  text-decoration: underline;
+}
+
+.deleteButton:disabled {
+  background: none;
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+}
