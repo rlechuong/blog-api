@@ -70,6 +70,8 @@ h6 {
 /* Base Styles */
 
 :root {
+  color-scheme: dark;
+
   --color-bg: #121212;
   --color-surface: #1e1e1e;
   --color-surface-raised: #252525;
@@ -100,6 +102,10 @@ h6 {
 
   --max-width-content: 65ch;
   --radius: 6px;
+}
+
+html {
+  scrollbar-gutter: stable both-edges;
 }
 
 body {

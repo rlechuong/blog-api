@@ -5,6 +5,7 @@ import LoginPage from "./pages/LoginPage.js";
 import NotFoundPage from "./pages/NotFoundPage.js";
 import RequireRole from "./components/RequireRole.js";
 import PostFormPage from "./pages/PostFormPage.js";
+import UsersPage from "./pages/UsersPage.js";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,14 @@ const router = createBrowserRouter([
         element: (
           <RequireRole allowedRoles={["AUTHOR", "ADMIN"]}>
             <PostFormPage />
+          </RequireRole>
+        ),
+      },
+      {
+        path: "users",
+        element: (
+          <RequireRole allowedRoles={["ADMIN"]}>
+            <UsersPage />
           </RequireRole>
         ),
       },

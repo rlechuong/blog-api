@@ -7,6 +7,7 @@ import EmptyMessage from "../components/EmptyMessage.js";
 import PostRow from "../components/PostRow.js";
 import { ApiError } from "../api/client.js";
 import type { Post } from "../types/post.js";
+import tableStyles from "../styles/table.module.css";
 import styles from "./DashboardPage.module.css";
 
 const DashboardPage = () => {
@@ -60,7 +61,7 @@ const DashboardPage = () => {
   return (
     <div>
       <h1 className={styles.pageTitle}>Posts</h1>
-      <table className={styles.table}>
+      <table className={tableStyles.table}>
         <thead>
           <tr>
             <th>Title</th>

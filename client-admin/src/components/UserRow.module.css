@@ -1,0 +1,26 @@
+.userCell,
+.emailCell {
+  max-width: 20rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.roleSelect {
+  width: 10rem;
+  padding: var(--space-xs) var(--space-sm);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.roleSelect:disabled {
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+}
+
+.youBadge {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
