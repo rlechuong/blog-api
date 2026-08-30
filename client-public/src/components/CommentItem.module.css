@@ -9,3 +9,47 @@
   font-size: var(--font-size-sm);
   margin-bottom: var(--space-xs);
 }
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  align-items: center;
+  margin-top: var(--space-md);
+}
+
+.actionButton {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-accent);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  font-weight: inherit;
+}
+
+.actionButton:hover:not(:disabled) {
+  background: none;
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}
+
+.actionButton:disabled {
+  background: none;
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+}
+
+.deleteButton {
+  color: var(--color-error);
+}
+
+.deleteButton:hover:not(:disabled) {
+  color: var(--color-error);
+  text-decoration: underline;
+}
+
+.textarea {
+  min-height: 5rem;
+  resize: vertical;
+}

@@ -28,6 +28,30 @@ const PostPage = () => {
     );
   };
 
+  const handleCommentUpdated = (updatedComment: Comment) => {
+    setPost((prevPost) =>
+      prevPost
+        ? {
+            ...prevPost,
+            comments: prevPost.comments.map((comment) =>
+              comment.id === updatedComment.id ? updatedComment : comment,
+            ),
+          }
+        : prevPost,
+    );
+  };
+
+  const handleCommentDeleted = (deletedCommentId: number) => {
+    setPost((prevPost) =>
+      prevPost
+        ? {
+            ...prevPost,
+            comments: prevPost.comments.filter((comment) => comment.id !== deletedCommentId),
+          }
+        : prevPost,
+    );
+  };
+
   useEffect(() => {
     if (!isValidId) {
       return;
@@ -91,7 +115,14 @@ const PostPage = () => {
 
       <section className={styles.section}>
         <h2>Comments</h2>
-        <CommentList comments={post.comments} />
+        <CommentList
+          comments={post.comments}
+          currentUserId={user?.id}
+          currentUserRole={user?.role}
+          postAuthorId={post.authorId}
+          onCommentUpdated={handleCommentUpdated}
+          onCommentDeleted={handleCommentDeleted}
+        />
       </section>
     </div>
   );
