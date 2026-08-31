@@ -113,7 +113,7 @@ const CommentItem = ({
           </div>
         ) : (
           <div>
-            <p>{comment.content}</p>
+            <p className={styles.content}>{comment.content}</p>
             <div className={styles.actions}>
               {canEdit && (
                 <button

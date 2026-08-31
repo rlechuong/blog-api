@@ -99,7 +99,7 @@ const PostPage = () => {
             </>
           )}
         </p>
-        <p>{post.content}</p>
+        <p className={styles.content}>{post.content}</p>
       </article>
 
       <section className={styles.section}>

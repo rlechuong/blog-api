@@ -53,3 +53,7 @@
   min-height: 5rem;
   resize: vertical;
 }
+
+.content {
+  white-space: pre-wrap;
+}

@@ -49,7 +49,7 @@ const CommentItem = ({ comment, onCommentDeleted }: CommentItemProps) => {
             {deleting ? "Deleting..." : "Delete"}
           </button>
         </div>
-        <p>{comment.content}</p>
+        <p className={styles.content}>{comment.content}</p>
         {error && <ErrorMessage message={error} />}
       </article>
     </li>
